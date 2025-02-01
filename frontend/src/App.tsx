@@ -1,12 +1,15 @@
 import React from 'react';
 import { BarChart3, MessageSquare, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
+import PosIcon from './svg/positive.svg';
+import NegIcon from './svg/negative.svg';
 
 function App() {
   const insights = Array(12).fill(null).map((_, i) => ({
     id: i + 1,
     title: `Insight ${i + 1}`,
     value: `$${(Math.random() * 10000).toFixed(2)}`,
-    description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`
+    description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`,
+    icon: PosIcon
   }));
 
   const bottomInsights = [
