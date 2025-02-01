@@ -20,6 +20,7 @@ class LLMClient:
         """
         self.retriever = retriever
         self.embedding_model = embedding_model
+        print(f"OpenAI API Key: {openai_api_key}")        
         self.client = AsyncOpenAI(
             api_key=openai_api_key,
         )
@@ -60,7 +61,7 @@ class LLMClient:
         prompt = [
             {
                 "role": "system",
-                "content": f"You are a compassionate biblical counselor. Use the following context to assist the user:\n\n{context_text}",
+                "content": f"Hey there, I'm your financial helper. I'm here to make sure you're financially secure. How can I assist you today?\n\n{context_text}",
             }
         ]
 
