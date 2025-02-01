@@ -12,7 +12,8 @@ from custom_types import (
     ResponseRequiredRequest,
 )
 from llm import LLMClient
-from db.db import save_message, get_messages
+from db.db import save_message
+import datetime
 
 load_dotenv(override=True)
 retell = Retell(api_key=os.getenv("RETELL_API_KEY"))
@@ -99,17 +100,30 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
         )
         await websocket.send_json(config.__dict__)
 
+        # Store the latest transcript messages
+        final_transcript = []
+        from_number = '0000'
+
         # Handle incoming messages
         async def handle_message(request_json):
+            nonlocal final_transcript  # Keep track of transcript
+            nonlocal from_number  # Keep track of from_number
+            print(request_json)
             interaction_type = request_json["interaction_type"]
             response_id = request_json.get("response_id", 0)
             transcript = request_json.get("transcript", [])
             timestamp = request_json.get("timestamp", "")
+            from_number = request_json.get("call", {}).get("from_number", from_number)
+
+            # Update the final transcript
+            if transcript:
+                # Store the latest transcript, only save role and content
+                final_transcript = [{"role": msg["role"], "content": msg["content"]} for msg in transcript]
 
             # Save message to Supabase
             await save_message(
                 call_id=call_id,
-                response_id=response_id,
+                from_number=from_number,
                 interaction_type=interaction_type,
                 transcript=transcript,
                 timestamp=timestamp
@@ -133,7 +147,7 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
                     response_id=response_id,
                     transcript=transcript,
                 )
-                print(f"Received interaction_type={interaction_type}, response_id={response_id}, last_transcript={transcript[-1]['content'] if transcript else 'N/A'}")
+                # print(f"Received interaction_type={interaction_type}, response_id={response_id}, last_transcript={transcript[-1]['content'] if transcript else 'N/A'}")
 
                 async for event in llm_client.draft_response(request):
                     await websocket.send_json(event.__dict__)
@@ -152,5 +166,13 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
         print(f"Error in LLM WebSocket: {e} for {call_id}")
         await websocket.close(1011, "Server error")
     finally:
-        # Perform any necessary cleanup or data saving after the call ends
+        # Perform final save with the last known transcript
         print(f"LLM WebSocket connection closed for {call_id}")
+        # await save_message(
+        #     call_id=call_id,
+        #     user_number=from_number,
+        #     transcript=final_transcript,  # Save the last transcript before closing
+        #     timestamp=datetime.datetime.utcnow().isoformat()
+        # )
+        print(final_transcript)
+        print(from_number)
