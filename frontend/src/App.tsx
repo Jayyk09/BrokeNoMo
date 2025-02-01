@@ -1,4 +1,5 @@
 import React from 'react';
+import BarChart from "./components/BarChart.tsx";
 import { BarChart3, MessageSquare, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
 
 function App() {
@@ -10,25 +11,34 @@ function App() {
   }));
 
   const bottomInsights = [
-    { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-green-400' },
-    { icon: DollarSign, title: 'Revenue', value: '$45,678', color: 'text-blue-400' },
-    { icon: Users, title: 'Clients', value: '1,234', color: 'text-purple-400' },
-    { icon: Activity, title: 'Market Activity', value: 'High', color: 'text-red-400' },
-    { icon: Briefcase, title: 'Investments', value: '$89,012', color: 'text-yellow-400' },
-    { icon: PieChart, title: 'Asset Mix', value: 'Balanced', color: 'text-indigo-400' },
+    { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
+    { icon: DollarSign, title: 'Revenue', value: '$45,678', color: 'text-fuchsia-500' },
+    { icon: Users, title: 'Clients', value: '1,234', color: 'text-fuchsia-500' },
+    { icon: Activity, title: 'Market Activity', value: 'High', color: 'text-fuchsia-500' },
+    { icon: Briefcase, title: 'Investments', value: '$89,012', color: 'text-fuchsia-500' },
+    { icon: PieChart, title: 'Asset Mix', value: 'Balanced', color: 'text-fuchsia-500' },
   ];
 
   const ledgerEntries = [
     { type: 'user', text: 'Request portfolio analysis for Q1 2024', timestamp: '09:45 AM' },
-    { type: 'ai', text: 'Analysis complete. Portfolio shows 15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
+    { type: 'ai', text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
     { type: 'user', text: 'Show detailed breakdown of tech investments', timestamp: '09:48 AM' },
     { type: 'ai', text: 'Tech sector breakdown:\n- Software: 45%\n- Hardware: 30%\n- AI/ML: 25%\nTotal value: $234,567', timestamp: '09:49 AM' }
+  ];
+
+  const data = [
+    { label: "A", value: 30 },
+    { label: "B", value: 80 },
+    { label: "C", value: 45 },
+    { label: "D", value: 60 },
+    { label: "E", value: 20 },
+    { label: "F", value: 90 },
   ];
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#0f0f2d] via-[#1f1f5a] to-[#3a1f7a] text-gray-100">
       {/* Left Sidebar */}
-      <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50">
+      <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50 bg-gray-900/70">
         {/* Fixed Username */}
         <div className="p-4 border-b border-gray-800/50">
           <div className="flex items-center gap-2">
@@ -38,20 +48,24 @@ function App() {
         </div>
         
         {/* Scrolling Insights */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden relative">
           <div className="animate-scroll">
-            {insights.map((insight) => (
-              <div 
-                key={insight.id}
-                className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors has-tooltip relative"
-              >
-                <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-                <div className="tooltip bg-gray-900 p-4 rounded-lg shadow-lg max-w-xs ml-[200px] mt-[-40px]">
-                  <p className="text-sm">{insight.description}</p>
+            <div className="scroll-content">
+              {/* First copy of insights */}
+              {insights.map((insight) => (
+                <div key={insight.id} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
+                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
+                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+              {/* Duplicate insights for seamless scrolling */}
+              {insights.map((insight) => (
+                <div key={`dup-${insight.id}`} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
+                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
+                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -64,7 +78,8 @@ function App() {
             <h2 className="text-xl font-semibold">Performance Overview</h2>
           </div>
           <div className="h-[300px] bg-gray-800/30 rounded-lg mb-6 flex items-center justify-center">
-            <span className="text-gray-500">Graph Placeholder</span>
+            {/* <span className="text-gray-500">Graph Placeholder</span> */}
+            <BarChart data={data} />
           </div>
           <div className="grid grid-cols-3 gap-4">
             {bottomInsights.map((insight, index) => (
@@ -81,7 +96,7 @@ function App() {
       </div>
 
       {/* Right Ledger Section */}
-      <div className="w-1/4 min-w-[300px] border-l border-gray-800/50 p-6">
+      <div className="w-1/4 min-w-[300px] border-l border-gray-800/50 p-6 bg-gray-900/70">
         <div className="flex items-center gap-2 mb-6">
           <MessageSquare className="w-6 h-6 text-purple-400" />
           <h2 className="text-xl font-semibold">Transaction Ledger</h2>

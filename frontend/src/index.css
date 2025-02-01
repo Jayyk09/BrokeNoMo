@@ -12,36 +12,30 @@
 }
 
 .animate-scroll {
-  animation: scroll 30s linear infinite;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.animate-scroll::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-.animate-scroll:hover {
-  animation-play-state: paused;
-}
-
-.animate-scroll {
-  padding: 0.5rem 0;
-}
-
-.animate-scroll > div {
-  margin: 0.5rem 0;
-}
-
-.animate-scroll {
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  height: 100%; /* Adjust as needed */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-.animate-scroll > div {
-  flex-shrink: 0;
+/* Hide scrollbar for WebKit-based browsers */
+.animate-scroll::-webkit-scrollbar {
+  display: none;
 }
 
+/* Duplicate content for seamless effect */
+.animate-scroll .scroll-content {
+  display: flex;
+  flex-direction: column;
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover .scroll-content {
+  animation-play-state: paused;
+}
 .tooltip {
   @apply invisible absolute;
 }
