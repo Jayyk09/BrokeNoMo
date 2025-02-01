@@ -51,7 +51,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, width = 500, height = 300 }) 
         tooltip
           .style("visibility", "visible")
           .text(`${d.label}: ${d.value}`)
-          .style("left", `${(rect.left + window.scrollX) - 450}px`) // Adjust for scrolling
+          .style("left", `${(rect.left + window.scrollX) - 445}px`) // Adjust for scrolling
           .style("top", `${(rect.top + window.scrollY) - 180}px`);
       })
       
