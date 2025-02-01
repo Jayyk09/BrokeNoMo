@@ -1,9 +1,9 @@
 import json
 import os
-import asyncio
 from dotenv import load_dotenv
 from RAG_Model.helper_utils import load_or_create_faiss_index
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from concurrent.futures import TimeoutError as ConnectionTimeoutError
 from retell import Retell
@@ -41,6 +41,17 @@ async def app_lifespan(app):
     yield  # Lifespan enters the main application runtime here
 
 app = FastAPI(lifespan=app_lifespan)
+origins = [
+    "http://localhost:3000",  #React frontend
+
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Handle webhook from Retell server. This is used to receive events from Retell server.
 # Including call_started, call_ended, call_analyzed
