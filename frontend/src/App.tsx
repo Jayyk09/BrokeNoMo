@@ -3,6 +3,8 @@ import BarChart from "./components/BarChart.tsx";
 import { BarChart3, MessageSquare, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
 
 function App() {
+ 
+
   const insights = Array(12).fill(null).map((_, i) => ({
     id: i + 1,
     title: `Insight ${i + 1}`,
