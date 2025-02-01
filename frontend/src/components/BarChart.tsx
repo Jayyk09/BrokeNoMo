@@ -50,9 +50,9 @@ const BarChart: React.FC<BarChartProps> = ({ data, width = 500, height = 300 }) 
       
         tooltip
           .style("visibility", "visible")
-          .text(`${d.label}: Left ${rect.left}, Top ${rect.top}`)
-          .style("left", `${(rect.left + window.scrollX) - 350}px`) // Adjust for scrolling
-          .style("top", `${(rect.top + window.scrollY) - 120}px`);
+          .text(`${d.label}: ${d.value}`)
+          .style("left", `${(rect.left + window.scrollX) - 450}px`) // Adjust for scrolling
+          .style("top", `${(rect.top + window.scrollY) - 180}px`);
       })
       
       .on("mouseout", () => {
@@ -77,6 +77,8 @@ const BarChart: React.FC<BarChartProps> = ({ data, width = 500, height = 300 }) 
           position: "absolute",
           backgroundColor: "rgba(0,0,0,0.75)",
           color: "white",
+          height: "100px",
+          width: "100px",
           padding: "5px",
           borderRadius: "4px",
           fontSize: "12px",
