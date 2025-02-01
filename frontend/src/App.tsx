@@ -38,20 +38,24 @@ function App() {
         </div>
         
         {/* Scrolling Insights */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden relative">
           <div className="animate-scroll">
-            {insights.map((insight) => (
-              <div 
-                key={insight.id}
-                className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors has-tooltip relative"
-              >
-                <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-                <div className="tooltip bg-gray-900 p-4 rounded-lg shadow-lg max-w-xs ml-[200px] mt-[-40px]">
-                  <p className="text-sm">{insight.description}</p>
+            <div className="scroll-content">
+              {/* First copy of insights */}
+              {insights.map((insight) => (
+                <div key={insight.id} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
+                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
+                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+              {/* Duplicate insights for seamless scrolling */}
+              {insights.map((insight) => (
+                <div key={`dup-${insight.id}`} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
+                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
+                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
