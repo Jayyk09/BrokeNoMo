@@ -33,7 +33,7 @@ function App() {
     { label: "D", value: 60 },
     { label: "E", value: 20 },
     { label: "F", value: 90 },
-  ];
+  ]; 
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#0f0f2d] via-[#1f1f5a] to-[#3a1f7a] text-gray-100">
