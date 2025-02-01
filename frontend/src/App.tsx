@@ -4,16 +4,20 @@ import { BarChart3, MessageSquare, User, TrendingUp, DollarSign, Users, Activity
 import PosIcon from './svg/positive.svg';
 import NegIcon from './svg/negative.svg';
 
-function App() {
- 
+const getIcon = (value: string) => (parseFloat(value.replace(/[$,]/g, '')) >= 5000 ? PosIcon : NegIcon);
 
-  const insights = Array(12).fill(null).map((_, i) => ({
-    id: i + 1,
-    title: `Insight ${i + 1}`,
-    value: `$${(Math.random() * 10000).toFixed(2)}`,
-    description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`,
-    icon: PosIcon
-  }));
+function App() {
+
+  const insights = Array(12).fill(null).map((_, i) => {
+    const value = `$${(Math.random() * 10000).toFixed(2)}`;
+    return {
+      id: i + 1,
+      title: `Insight ${i + 1}`,
+      value,
+      description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`,
+      icon: getIcon(value)
+    };
+  });
 
   const bottomInsights = [
     { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
@@ -60,14 +64,20 @@ function App() {
               {insights.map((insight) => (
                 <div key={insight.id} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
                   <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
+                  <div className="flex items-center justify-center mt-1">
+                    <img src={insight.icon} alt="icon" className="w-4 h-4 mr-2" />
+                    <span className="text-purple-400">{insight.value}</span>
+                  </div>
                 </div>
               ))}
               {/* Duplicate insights for seamless scrolling */}
               {insights.map((insight) => (
                 <div key={`dup-${insight.id}`} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
                   <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
+                  <div className="flex items-center justify-center mt-1">
+                    <img src={insight.icon} alt="icon" className="w-4 h-4 mr-2" />
+                    <span className="text-purple-400">{insight.value}</span>
+                  </div>
                 </div>
               ))}
             </div>
