@@ -38,7 +38,7 @@ function App() {
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#0f0f2d] via-[#1f1f5a] to-[#3a1f7a] text-gray-100">
       {/* Left Sidebar */}
-      <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50">
+      <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50 bg-gray-900/70">
         {/* Fixed Username */}
         <div className="p-4 border-b border-gray-800/50">
           <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ function App() {
       </div>
 
       {/* Right Ledger Section */}
-      <div className="w-1/4 min-w-[300px] border-l border-gray-800/50 p-6">
+      <div className="w-1/4 min-w-[300px] border-l border-gray-800/50 p-6 bg-gray-900/70">
         <div className="flex items-center gap-2 mb-6">
           <MessageSquare className="w-6 h-6 text-purple-400" />
           <h2 className="text-xl font-semibold">Transaction Ledger</h2>
