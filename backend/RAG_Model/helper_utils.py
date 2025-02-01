@@ -89,37 +89,6 @@ def preprocess_data(file_paths, chunk_size=500, chunk_overlap=50, tokens_per_chu
     documents = [Document(page_content=text) for text in token_split_texts]
     return documents
 
-# Either use the augmented query or the multiple queries
-
-# def generate_multiple_queries(query, num_queries=5, client=None):
-#     """
-#     Generates multiple related questions based on a Bible-related query.
-#     Args:
-#         query (str): The original question.
-#         num_queries (int): Number of related questions to generate (default: 5).
-#         model (str): The language model to use (default: "gpt-3.5-turbo").
-#         client: The OpenAI client instance for API calls.
-#     Returns:
-#         list: List of related questions generated from the query.
-#     """
-#     prompt = f"""
-#     You are a knowledgeable and compassionate biblical counselor. 
-#     For the given query "{query}", propose up to {num_queries} related questions to help them explore the topic further. 
-#     List each question on a separate line without numbering.
-#     """
-
-#     response = client.chat.completions.create(
-#         model="gpt-4o-mini",
-#         messages=[
-#             {"role": "system", "content": "You are a helpful assistant."},
-#             {"role": "user", "content": prompt}
-#         ]
-#     )
-
-#     content = response.choices[0].message.content
-#     content = [q.strip() for q in content.split("\n") if q.strip()]
-#     return content
-
 def generate_final_answer( original_query, retriever, model=None):
     """
     Generates a final, consolidated answer based on the original query, augmented queries, and retrieved documents.
@@ -135,8 +104,6 @@ def generate_final_answer( original_query, retriever, model=None):
     if model is None:
         client = OpenAI()
 
-    # augmented_queries = generate_multiple_queries(original_query)
-    # joined_queries = original_query + " " + " ".join(augmented_queries)
     # get context from retriever
     context = retriever.similarity_search(original_query, k=5)
     # Prepare context for the model
