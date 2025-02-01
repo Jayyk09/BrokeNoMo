@@ -4,6 +4,7 @@ from typing import Optional
 from dotenv import load_dotenv
 from RAG_Model.helper_utils import load_or_create_faiss_index
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi.websockets import WebSocketState
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from concurrent.futures import TimeoutError as ConnectionTimeoutError
@@ -14,8 +15,29 @@ from custom_types import (
 )
 from llm import LLMClient
 from db.db import save_message
-import datetime
+from datetime import datetime
 
+
+def format_conversation(post_data):
+    # Extract necessary data
+    conversation_data = post_data.get("data", {}).get("transcript_object", [])
+    call_id = post_data.get("data", {}).get("call_id", "unknown")
+    timestamp = datetime.utcnow().isoformat()
+
+    # Only keep 'role' and 'content' in the conversation
+    formatted_conversation = []
+    for entry in conversation_data:
+        formatted_conversation.append({
+            "role": entry["role"],
+            "content": entry["content"]
+        })
+
+    # Structure the formatted data
+    return {
+        "conversation": formatted_conversation,
+        "call_id": call_id,
+        "timestamp": timestamp
+    }
 
 load_dotenv(override=True)
 retell = Retell(api_key=os.getenv("RETELL_API_KEY"))
@@ -81,8 +103,8 @@ async def handle_webhook(request: Request):
             from_number = post_data["data"]["from_number"]  # Get the from_number
             print(from_number)
         elif post_data["event"] == "call_analyzed":
-            print("Call analyzed event", post_data["data"]["call_id"])
-            print("Transcript:", post_data["data"]["transcript"])
+            formatted_conversation = format_conversation(post_data=post_data)
+            print(formatted_conversation)
         else:
             print("Unknown event", post_data["event"])
         
@@ -117,6 +139,11 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
         # Handle incoming messages
         async def handle_message(request_json):
             try:
+                # Ensure WebSocket is open
+                if websocket.client_state != WebSocketState.CONNECTED:
+                    print("WebSocket is no longer connected.")
+                    return
+
                 await websocket.send_json(request_json)  # Send incoming message back
                 interaction_type = request_json["interaction_type"]
                 response_id = request_json.get("response_id", 0)
