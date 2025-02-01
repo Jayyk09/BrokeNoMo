@@ -7,6 +7,9 @@ from custom_types import (
     Utterance,
 )
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
@@ -20,7 +23,7 @@ class LLMClient:
         """
         self.retriever = retriever
         self.embedding_model = embedding_model
-        print(f"OpenAI API Key: {openai_api_key}")        
+        # print(f"OpenAI API Key: {openai_api_key}")        
         self.client = AsyncOpenAI(
             api_key=openai_api_key,
         )
