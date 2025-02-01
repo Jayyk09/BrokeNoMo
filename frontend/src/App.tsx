@@ -27,10 +27,10 @@ function App() {
   ];
 
   const ledgerEntries = [
-    { type: 'user', text: 'Request portfolio analysis for Q1 2024', timestamp: '09:45 AM' },
-    { type: 'ai', text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
-    { type: 'user', text: 'Show detailed breakdown of tech investments', timestamp: '09:48 AM' },
-    { type: 'ai', text: 'Tech sector breakdown:\n- Software: 45%\n- Hardware: 30%\n- AI/ML: 25%\nTotal value: $234,567', timestamp: '09:49 AM' }
+    { type: 'user' as const, text: 'Request portfolio analysis for Q1 2024', timestamp: '09:45 AM' },
+    { type: 'ai' as const, text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
+    { type: 'user' as const, text: 'Show detailed breakdown of tech investments', timestamp: '09:48 AM' },
+    { type: 'ai' as const, text: 'Tech sector breakdown:\n- Software: 45%\n- Hardware: 30%\n- AI/ML: 25%\nTotal value: $234,567', timestamp: '09:49 AM' }
   ];
 
   const data = [
@@ -55,26 +55,7 @@ function App() {
         </div>
         
         {/* Scrolling Insights */}
-        <div className="flex-1 overflow-hidden relative">
-          <div className="animate-scroll">
-            <div className="scroll-content">
-              {/* First copy of insights */}
-              {insights.map((insight) => (
-                <div key={insight.id} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
-                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-                </div>
-              ))}
-              {/* Duplicate insights for seamless scrolling */}
-              {insights.map((insight) => (
-                <div key={`dup-${insight.id}`} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
-                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <ScrollingInsights insights={insights} />
       </div>
 
       {/* Main Content */}
@@ -88,22 +69,12 @@ function App() {
             {/* <span className="text-gray-500">Graph Placeholder</span> */}
             <BarChart data={data} />
           </div>
-          <div className="grid grid-cols-3 gap-4">
-            {bottomInsights.map((insight, index) => (
-              <div key={index} className="bg-gray-800/30 rounded-lg p-4 backdrop-blur-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <insight.icon className={`w-5 h-5 ${insight.color}`} />
-                  <h3 className="font-medium">{insight.title}</h3>
-                </div>
-                <p className={`text-xl font-bold ${insight.color}`}>{insight.value}</p>
-              </div>
-            ))}
-          </div>
+          <BottomInsights insights={bottomInsights} />
         </div>
       </div>
 
       {/* Right Ledger Section */}
-      
+      <RightLedger ledgerEntries={ledgerEntries} />
     </div>
   );
 }
