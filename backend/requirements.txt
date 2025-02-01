@@ -9,3 +9,4 @@ sentence-transformers
 uvicorn
 fastapi
 python-dotenv
+fastapi[standard]

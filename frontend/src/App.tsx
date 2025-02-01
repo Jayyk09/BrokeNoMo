@@ -1,9 +1,12 @@
 import React from 'react';
+import BarChart from "./components/BarChart.tsx";
 import { BarChart3, MessageSquare, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
 import PosIcon from './svg/positive.svg';
 import NegIcon from './svg/negative.svg';
 
 function App() {
+ 
+
   const insights = Array(12).fill(null).map((_, i) => ({
     id: i + 1,
     title: `Insight ${i + 1}`,
@@ -23,9 +26,18 @@ function App() {
 
   const ledgerEntries = [
     { type: 'user', text: 'Request portfolio analysis for Q1 2024', timestamp: '09:45 AM' },
-    { type: 'ai', text: 'Analysis complete. Portfolio shows 15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
+    { type: 'ai', text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
     { type: 'user', text: 'Show detailed breakdown of tech investments', timestamp: '09:48 AM' },
     { type: 'ai', text: 'Tech sector breakdown:\n- Software: 45%\n- Hardware: 30%\n- AI/ML: 25%\nTotal value: $234,567', timestamp: '09:49 AM' }
+  ];
+
+  const data = [
+    { label: "A", value: 30 },
+    { label: "B", value: 80 },
+    { label: "C", value: 45 },
+    { label: "D", value: 60 },
+    { label: "E", value: 20 },
+    { label: "F", value: 90 },
   ];
 
   return (
@@ -71,7 +83,8 @@ function App() {
             <h2 className="text-xl font-semibold">Performance Overview</h2>
           </div>
           <div className="h-[300px] bg-gray-800/30 rounded-lg mb-6 flex items-center justify-center">
-            <span className="text-gray-500">Graph Placeholder</span>
+            {/* <span className="text-gray-500">Graph Placeholder</span> */}
+            <BarChart data={data} />
           </div>
           <div className="grid grid-cols-3 gap-4">
             {bottomInsights.map((insight, index) => (

@@ -42,15 +42,6 @@ class LLMClient:
             else:
                 messages.append({"role": "user", "content": utterance.content})
         return messages
-
-    def convert_transcript_to_openai_messages(self, transcript: List[Utterance]):
-        messages = []
-        for utterance in transcript:
-            if utterance.role == "agent":
-                messages.append({"role": "assistant", "content": utterance.content})
-            else:
-                messages.append({"role": "user", "content": utterance.content})
-        return messages
     
     def generate_agent_prompt(self, request: ResponseRequiredRequest):
         # TODO: Add context from RAG model
