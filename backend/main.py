@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Optional
 from dotenv import load_dotenv
 from RAG_Model.helper_utils import load_or_create_faiss_index
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
@@ -14,6 +15,7 @@ from custom_types import (
 from llm import LLMClient
 from db.db import save_message
 import datetime
+
 
 load_dotenv(override=True)
 retell = Retell(api_key=os.getenv("RETELL_API_KEY"))
@@ -42,7 +44,7 @@ async def app_lifespan(app):
 
 app = FastAPI(lifespan=app_lifespan)
 origins = [
-    "http://localhost:3000",  #React frontend
+    "http://localhost:5174",  #React frontend
 
 ]
 app.add_middleware(
@@ -55,38 +57,39 @@ app.add_middleware(
 
 # Handle webhook from Retell server. This is used to receive events from Retell server.
 # Including call_started, call_ended, call_analyzed
-# Handle webhook from Retell server. This is used to receive events from Retell server.
-# Including call_started, call_ended, call_analyzed
 @app.post("/webhook")
 async def handle_webhook(request: Request):
     try:
         post_data = await request.json()
         valid_signature = retell.verify(
             json.dumps(post_data, separators=(",", ":"), ensure_ascii=False),
-            api_key=str(os.environ["RETELL_API_KEY"]),
+            api_key=os.getenv("RETELL_API_KEY"),
             signature=str(request.headers.get("X-Retell-Signature")),
         )
         if not valid_signature:
-            print(
-                "Received Unauthorized",
-                post_data["event"],
-                post_data["data"]["call_id"],
-            )
+            print("Received Unauthorized", post_data["event"], post_data["data"]["call_id"])
             return JSONResponse(status_code=401, content={"message": "Unauthorized"})
+        
+        # Check the event type
         if post_data["event"] == "call_started":
-            print("Call started event", post_data["data"]["call_id"])
+            print("Call started event", post_data["data"]["call_id"])  # This should print
+            print("from number", post_data["data"]["from_number"])  # This should print
+
         elif post_data["event"] == "call_ended":
             print("Call ended event", post_data["data"]["call_id"])
+            # Clear the active call for that number
+            from_number = post_data["data"]["from_number"]  # Get the from_number
+            print(from_number)
         elif post_data["event"] == "call_analyzed":
             print("Call analyzed event", post_data["data"]["call_id"])
+            print("Transcript:", post_data["data"]["transcript"])
         else:
             print("Unknown event", post_data["event"])
+        
         return JSONResponse(status_code=200, content={"received": True})
     except Exception as err:
         print(f"Error in webhook: {err}")
-        return JSONResponse(
-            status_code=500, content={"message": "Internal Server Error"}
-        )
+        return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
     
 # Start a websocket server to exchange text input and output with Retell server. Retell server
 # will send over transcriptions and other information. This server here will be responsible for
@@ -111,62 +114,60 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
         )
         await websocket.send_json(config.__dict__)
 
-        # Store the latest transcript messages
-        final_transcript = []
-        from_number = '0000'
-
         # Handle incoming messages
         async def handle_message(request_json):
-            nonlocal final_transcript  # Keep track of transcript
-            nonlocal from_number  # Keep track of from_number
-            print(request_json)
-            interaction_type = request_json["interaction_type"]
-            response_id = request_json.get("response_id", 0)
-            transcript = request_json.get("transcript", [])
-            timestamp = request_json.get("timestamp", "")
-            from_number = request_json.get("call", {}).get("from_number", from_number)
+            try:
+                await websocket.send_json(request_json)  # Send incoming message back
+                interaction_type = request_json["interaction_type"]
+                response_id = request_json.get("response_id", 0)
+                transcript = request_json.get("transcript", [])
+                timestamp = request_json.get("timestamp", "")
 
-            # Update the final transcript
-            if transcript:
-                # Store the latest transcript, only save role and content
-                final_transcript = [{"role": msg["role"], "content": msg["content"]} for msg in transcript]
+                print(f"Interaction Type: {interaction_type}")  # Debugging line
 
-            # Save message to Supabase
-            await save_message(
-                call_id=call_id,
-                from_number=from_number,
-                interaction_type=interaction_type,
-                transcript=transcript,
-                timestamp=timestamp
-            )
+                # Handle specific interaction types
+                if interaction_type == "call_details":
+                    first_event = llm_client.draft_begin_message()
+                    await websocket.send_json(first_event.__dict__)
 
-            # Handle specific interaction types
-            if interaction_type == "call_details":
-                print(json.dumps(request_json, indent=2))
-                first_event = llm_client.draft_begin_message()
-                await websocket.send_json(first_event.__dict__)
+                    return
 
-            elif interaction_type == "ping_pong":
-                await websocket.send_json({
-                    "response_type": "ping_pong",
-                    "timestamp": timestamp,
-                })
-
-            elif interaction_type in ["response_required", "reminder_required"]:
-                request = ResponseRequiredRequest(
-                    interaction_type=interaction_type,
-                    response_id=response_id,
-                    transcript=transcript,
+                if request_json["interaction_type"] == "ping_pong":
+                    await websocket.send_json(
+                        {
+                        "response_type": "ping_pong",
+                        "timestamp": request_json["timestamp"],
+                        }
                 )
-                # print(f"Received interaction_type={interaction_type}, response_id={response_id}, last_transcript={transcript[-1]['content'] if transcript else 'N/A'}")
+                    return
+                if request_json["interaction_type"] == "update_only":
+                    return
 
-                async for event in llm_client.draft_response(request):
-                    await websocket.send_json(event.__dict__)
-                    if request.response_id < response_id:
-                        break  # new response needed, abandon this one
+                if (
+                    request_json["interaction_type"] == "response_required"
+                    or request_json["interaction_type"] == "reminder_required"
+                ):
+                    response_id = request_json["response_id"]
+                    request = ResponseRequiredRequest(
+                        interaction_type=request_json["interaction_type"],
+                        response_id=response_id,
+                        transcript=request_json["transcript"],
+                    )
+                    print(
+                        f"""Received interaction_type={request_json['interaction_type']}, response_id={response_id}, last_transcript={request_json['transcript'][-1]['content']}"""
+                    )
+
+                    async for event in llm_client.draft_response(request):
+                        await websocket.send_json(event.__dict__)
+                        if request.response_id < response_id:
+                            break  # new response needed, abandon this one
+
+            except Exception as e:
+                print(f"Error in handle_message: {e}")  # Debugging line
 
         # Listen for WebSocket messages and handle them
         async for data in websocket.iter_json():
+            print("Received data:", data)  # Debugging line
             await handle_message(data)
 
     except WebSocketDisconnect:
@@ -177,13 +178,4 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
         print(f"Error in LLM WebSocket: {e} for {call_id}")
         await websocket.close(1011, "Server error")
     finally:
-        # Perform final save with the last known transcript
         print(f"LLM WebSocket connection closed for {call_id}")
-        # await save_message(
-        #     call_id=call_id,
-        #     user_number=from_number,
-        #     transcript=final_transcript,  # Save the last transcript before closing
-        #     timestamp=datetime.datetime.utcnow().isoformat()
-        # )
-        print(final_transcript)
-        print(from_number)
