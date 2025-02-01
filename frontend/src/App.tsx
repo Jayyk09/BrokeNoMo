@@ -10,12 +10,12 @@ function App() {
   }));
 
   const bottomInsights = [
-    { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-green-400' },
-    { icon: DollarSign, title: 'Revenue', value: '$45,678', color: 'text-blue-400' },
-    { icon: Users, title: 'Clients', value: '1,234', color: 'text-purple-400' },
-    { icon: Activity, title: 'Market Activity', value: 'High', color: 'text-red-400' },
-    { icon: Briefcase, title: 'Investments', value: '$89,012', color: 'text-yellow-400' },
-    { icon: PieChart, title: 'Asset Mix', value: 'Balanced', color: 'text-indigo-400' },
+    { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
+    { icon: DollarSign, title: 'Revenue', value: '$45,678', color: 'text-fuchsia-500' },
+    { icon: Users, title: 'Clients', value: '1,234', color: 'text-fuchsia-500' },
+    { icon: Activity, title: 'Market Activity', value: 'High', color: 'text-fuchsia-500' },
+    { icon: Briefcase, title: 'Investments', value: '$89,012', color: 'text-fuchsia-500' },
+    { icon: PieChart, title: 'Asset Mix', value: 'Balanced', color: 'text-fuchsia-500' },
   ];
 
   const ledgerEntries = [
