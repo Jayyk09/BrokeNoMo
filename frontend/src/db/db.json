@@ -1,0 +1,161 @@
+{
+    "users": [
+        {
+            "user_id": "user_001",
+            "transactions": {
+                "January 2025": [
+                    {
+                        "id": "txn_001",
+                        "date": "2025-01-05",
+                        "tags": ["investment", "index fund"],
+                        "amount": -500,
+                        "category": "Investments",
+                        "merchant": "Vanguard",
+                        "description": "Invested in a diversified index fund",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_002",
+                        "date": "2025-01-07",
+                        "tags": ["investment", "retirement"],
+                        "amount": -150,
+                        "category": "Investments",
+                        "merchant": "Charles Schwab",
+                        "description": "Added to Roth IRA account",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_003",
+                        "date": "2025-01-10",
+                        "tags": ["investment", "crypto"],
+                        "amount": -100,
+                        "category": "Investments",
+                        "merchant": "Coinbase",
+                        "description": "Crypto purchase (Ethereum)",
+                        "payment_method": "PayPal"
+                    }
+                ],
+                "February 2025": [
+                    {
+                        "id": "txn_008",
+                        "date": "2025-02-02",
+                        "tags": ["investment", "ETF"],
+                        "amount": -500,
+                        "category": "Investments",
+                        "merchant": "Fidelity",
+                        "description": "ETF purchase for portfolio growth",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_009",
+                        "date": "2025-02-03",
+                        "tags": ["savings", "interest"],
+                        "amount": -200,
+                        "category": "Investments",
+                        "merchant": "Ally Bank",
+                        "description": "Added funds to high-yield savings account",
+                        "payment_method": "Debit Card"
+                    }
+                ]
+            }
+        },
+        {
+            "user_id": "user_002",
+            "transactions": {
+                "January 2025": [
+                    {
+                        "id": "txn_001",
+                        "day": 10,
+                        "tags": ["luxury", "entertainment"],
+                        "amount": -150,
+                        "category": "Entertainment",
+                        "merchant": "LiveNation",
+                        "description": "VIP tickets for concert",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_002",
+                        "day": 11,
+                        "tags": ["restaurant", "social"],
+                        "amount": -60,
+                        "category": "Food & Dining",
+                        "merchant": "Steakhouse",
+                        "description": "Expensive dinner with friends",
+                        "payment_method": "Credit Card"
+                    }
+                ],
+                "February 2025": [
+                    {
+                        "id": "txn_008",
+                        "day": 1,
+                        "tags": ["food", "convenience"],
+                        "amount": -45,
+                        "category": "Food & Dining",
+                        "merchant": "Uber Eats",
+                        "description": "Takeout for lunch and dinner",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_009",
+                        "day": 3,
+                        "tags": ["movies", "entertainment"],
+                        "amount": -70,
+                        "category": "Entertainment",
+                        "merchant": "AMC Theatres",
+                        "description": "Last-minute movie tickets",
+                        "payment_method": "Debit Card"
+                    }
+                ]
+            }
+        },
+        {
+            "user_id": "user_003",
+            "transactions": {
+                "January 2025": [
+                    {
+                        "id": "txn_001",
+                        "day": 28,
+                        "tags": ["restaurant", "social"],
+                        "amount": -45.99,
+                        "category": "Food & Dining",
+                        "merchant": "Olive Garden",
+                        "description": "Dinner at Olive Garden",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_002",
+                        "day": 29,
+                        "tags": ["coffee", "morning"],
+                        "amount": -5.49,
+                        "category": "Coffee",
+                        "merchant": "Starbucks",
+                        "description": "Morning latte at Starbucks",
+                        "payment_method": "Debit Card"
+                    }
+                ],
+                "February 2025": [
+                    {
+                        "id": "txn_004",
+                        "day": 1,
+                        "tags": ["subscription", "entertainment"],
+                        "amount": -15.99,
+                        "category": "Streaming Services",
+                        "merchant": "Netflix",
+                        "description": "Netflix monthly subscription",
+                        "payment_method": "PayPal"
+                    },
+                    {
+                        "id": "txn_005",
+                        "day": 2,
+                        "tags": ["food", "essentials"],
+                        "amount": -120,
+                        "category": "Groceries",
+                        "merchant": "Walmart",
+                        "description": "Weekly grocery shopping",
+                        "payment_method": "Debit Card"
+                    }
+                ]
+            }
+        }
+    ]
+}

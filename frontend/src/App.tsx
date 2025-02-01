@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BarChart from "./components/BarChart.tsx";
+import BottomInsights from './components/BottomInsights.tsx';
+import ScrollingInsights from './components/ScrollingInsights.tsx';
+import RightLedger from './components/RightLedger.tsx';
 import { BarChart3, MessageSquare, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
+import PosIcon from './svg/positive.svg';
+import NegIcon from './svg/negative.svg';
 
 function App() {
+
   const insights = Array(12).fill(null).map((_, i) => ({
     id: i + 1,
     title: `Insight ${i + 1}`,
     value: `$${(Math.random() * 10000).toFixed(2)}`,
-    description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`
+    description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`,
+    icon: PosIcon
   }));
 
   const bottomInsights = [
@@ -20,10 +27,10 @@ function App() {
   ];
 
   const ledgerEntries = [
-    { type: 'user', text: 'Request portfolio analysis for Q1 2024', timestamp: '09:45 AM' },
-    { type: 'ai', text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
-    { type: 'user', text: 'Show detailed breakdown of tech investments', timestamp: '09:48 AM' },
-    { type: 'ai', text: 'Tech sector breakdown:\n- Software: 45%\n- Hardware: 30%\n- AI/ML: 25%\nTotal value: $234,567', timestamp: '09:49 AM' }
+    { type: 'user' as const, text: 'Request portfolio analysis for Q1 2024', timestamp: '09:45 AM' },
+    { type: 'ai' as const, text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.', timestamp: '09:46 AM' },
+    { type: 'user' as const, text: 'Show detailed breakdown of tech investments', timestamp: '09:48 AM' },
+    { type: 'ai' as const, text: 'Tech sector breakdown:\n- Software: 45%\n- Hardware: 30%\n- AI/ML: 25%\nTotal value: $234,567', timestamp: '09:49 AM' }
   ];
 
   const data = [
@@ -48,26 +55,7 @@ function App() {
         </div>
         
         {/* Scrolling Insights */}
-        <div className="flex-1 overflow-hidden relative">
-          <div className="animate-scroll">
-            <div className="scroll-content">
-              {/* First copy of insights */}
-              {insights.map((insight) => (
-                <div key={insight.id} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
-                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-                </div>
-              ))}
-              {/* Duplicate insights for seamless scrolling */}
-              {insights.map((insight) => (
-                <div key={`dup-${insight.id}`} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
-                  <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                  <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <ScrollingInsights insights={insights} />
       </div>
 
       {/* Main Content */}
@@ -81,44 +69,12 @@ function App() {
             {/* <span className="text-gray-500">Graph Placeholder</span> */}
             <BarChart data={data} />
           </div>
-          <div className="grid grid-cols-3 gap-4">
-            {bottomInsights.map((insight, index) => (
-              <div key={index} className="bg-gray-800/30 rounded-lg p-4 backdrop-blur-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <insight.icon className={`w-5 h-5 ${insight.color}`} />
-                  <h3 className="font-medium">{insight.title}</h3>
-                </div>
-                <p className={`text-xl font-bold ${insight.color}`}>{insight.value}</p>
-              </div>
-            ))}
-          </div>
+          <BottomInsights insights={bottomInsights} />
         </div>
       </div>
 
       {/* Right Ledger Section */}
-      <div className="w-1/4 min-w-[300px] border-l border-gray-800/50 p-6 bg-gray-900/70">
-        <div className="flex items-center gap-2 mb-6">
-          <MessageSquare className="w-6 h-6 text-purple-400" />
-          <h2 className="text-xl font-semibold">Transaction Ledger</h2>
-        </div>
-        <div className="space-y-0">
-          {ledgerEntries.map((entry, index) => (
-            <div key={index} className="border-b border-gray-800/30">
-              <div className="py-4">
-                <div className="flex justify-between items-center mb-1">
-                  <span className={`text-xs ${entry.type === 'user' ? 'text-blue-300' : 'text-purple-300'}`}>
-                    {entry.type === 'user' ? 'User Request' : 'System Response'}
-                  </span>
-                  <span className="text-xs text-gray-500">{entry.timestamp}</span>
-                </div>
-                <p className={`text-sm whitespace-pre-line ${entry.type === 'user' ? 'text-gray-100' : 'text-gray-300'}`}>
-                  {entry.text}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <RightLedger ledgerEntries={ledgerEntries} />
     </div>
   );
 }
