@@ -5,7 +5,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
 const data = [
   {
-    name: "Mon",
+    name: "Mon", 
     total: 4000,
   },
   {
@@ -13,7 +13,7 @@ const data = [
     total: 3000,
   },
   {
-    name: "Wed",
+    name: "Wed", 
     total: 2000,
   },
   {
@@ -36,23 +36,36 @@ const data = [
 
 export function CallAnalyticsChart() {
   return (
-    <Card>
+    <Card className="bg-gray-800/50 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle>Call Analytics</CardTitle>
-        <CardDescription>Your call volume over the past week</CardDescription>
+        <CardTitle className="text-2xl font-bold text-white">Call Analytics</CardTitle>
+        <CardDescription className="text-gray-300">Your call volume over the past week</CardDescription>
       </CardHeader>
       <CardContent className="pl-2">
         <ResponsiveContainer width="100%" height={350}>
           <BarChart data={data}>
-            <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+            <XAxis 
+              dataKey="name" 
+              stroke="#ffffff" 
+              fontSize={14}
+              fontWeight={600}
+              tickLine={false} 
+              axisLine={false} 
+            />
             <YAxis
-              stroke="#888888"
-              fontSize={12}
+              stroke="#ffffff"
+              fontSize={14}
+              fontWeight={600}
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => `${value}`}
             />
-            <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+            <Bar 
+              dataKey="total" 
+              fill="#6366f1" 
+              radius={[6, 6, 0, 0]}
+              className="hover:opacity-80 transition-opacity"
+            />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

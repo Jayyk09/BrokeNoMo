@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react"
 import { Spotlight } from "../components/ui/spotlight-new"
 import { Header } from "../components/header"
-import { ChatList } from "../components/chat-list"
 import { MainContent } from "../components/main-content"
 
 interface DashboardProps {
@@ -35,11 +34,7 @@ export default function Dashboard({ userId }: DashboardProps) {
       <Header userId={userId} />
 
       {/* Main Content Section */}
-      <div className="flex flex-1 overflow-hidden">
-        <ChatList calls={calls} setCurrentChat={setCurrentChat} />
-        <MainContent currentChat={currentChat} />
-      </div>
+      <MainContent currentChat={currentChat} calls={calls} setCurrentChat={setCurrentChat} />
     </div>
   )
 }
-

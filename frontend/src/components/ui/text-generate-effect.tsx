@@ -1,62 +1,34 @@
-"use client";
-import { useEffect } from "react";
-import { motion, stagger, useAnimate } from "framer-motion";
-import cn from "../../lib/utils";
+"use client"
 
-export const TextGenerateEffect = ({
-  words,
-  className,
-  filter = true,
-  duration = 0.5,
-}: {
-  words: string;
-  className?: string;
-  filter?: boolean;
-  duration?: number;
-}) => {
-  const [scope, animate] = useAnimate();
-  let wordsArray = words.split(" ");
+import { useEffect } from "react"
+import { motion, useAnimation } from "framer-motion"
+
+export const TextGenerateEffect = ({ words }: { words: string }) => {
+  const controls = useAnimation()
+
+  const wordsArray = words.split(" ")
+
   useEffect(() => {
-    animate(
-      "span",
-      {
-        opacity: 1,
-        filter: filter ? "blur(0px)" : "none",
-      },
-      {
-        duration: duration ? duration : 1,
-        delay: stagger(0.2),
-      }
-    );
-  }, [scope.current]);
-
-  const renderWords = () => {
-    return (
-      <motion.div ref={scope}>
-        {wordsArray.map((word, idx) => {
-          return (
-            <motion.span
-              key={word + idx}
-              className="dark:text-white text-white text-light opacity-50 italic font-thin"
-              style={{
-                filter: filter ? "blur(10px)" : "none",
-              }}
-            >
-              {word}{" "}
-            </motion.span>
-          );
-        })}
-      </motion.div>
-    );
-  };
+    controls.start((i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.1 },
+    }))
+  }, [controls])
 
   return (
-    <div className={cn("font-bold", className)}>
-      <div className="mt-4">
-        <div className=" dark:text-white text-black text-2xl leading-snug tracking-wide">
-          {renderWords()}
-        </div>
-      </div>
+    <div className="text-center">
+      {wordsArray.map((word, idx) => (
+        <motion.span
+          key={`${word}-${idx}`}
+          className="text-white text-lg md:text-xl inline-block mr-1"
+          custom={idx}
+          initial={{ opacity: 0, y: 20 }}
+          animate={controls}
+        >
+          {word}
+        </motion.span>
+      ))}
     </div>
-  );
-};
+  )
+}

@@ -24,7 +24,7 @@ export function Header({ userId }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-700 bg-gray-800/50 backdrop-blur-sm">
-      <div className="container flex h-16 items-center justify-between px-4">
+      <div className="container flex h-16 items-center justify-between px-4 mx-auto max-w-7xl">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" className="md:hidden">
             <Menu className="h-5 w-5" />
@@ -43,7 +43,7 @@ export function Header({ userId }: HeaderProps) {
             >
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
             </svg>
-            <span className="hidden text-xl font-bold text-white sm:inline-block">ChatDash</span>
+            <span className="hidden text-xl font-bold text-white sm:inline-block">BrokeNoMo</span>
           </a>
         </div>
         <div className="flex flex-1 items-center justify-end gap-4">
@@ -96,4 +96,3 @@ export function Header({ userId }: HeaderProps) {
     </header>
   )
 }
-
