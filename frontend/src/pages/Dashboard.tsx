@@ -29,12 +29,12 @@ export default function Dashboard({ userId }: DashboardProps) {
 
   return (
     <div className="flex h-screen flex-col bg-gradient-to-br from-gray-900 to-gray-800">
-      <Spotlight className="left-0 top-0 md:-left-20 md:-top-20" fill="blue" />
+      <Spotlight />
 
       <Header userId={userId} />
 
       {/* Main Content Section */}
-      <MainContent currentChat={currentChat} calls={calls} setCurrentChat={setCurrentChat} />
+      <MainContent currentChat={currentChat} calls={calls} setCurrentChat={setCurrentChat} userId={userId} />
     </div>
   )
 }

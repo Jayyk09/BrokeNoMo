@@ -38,6 +38,7 @@ export default function Login({ onLogin }: LoginProps) {
 
     if (validUserIds.includes(userId)) {
       onLogin(userId)
+      setUserId(userId)
     } else {
       alert("Invalid User ID. Please try again.")
     }

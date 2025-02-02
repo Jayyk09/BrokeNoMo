@@ -10,7 +10,7 @@ interface MainContentProps {
   setCurrentChat: (chat: any) => void
 }
 
-export function MainContent({ currentChat, calls, setCurrentChat }: MainContentProps) {
+export function MainContent({ currentChat, calls, setCurrentChat, userId }: MainContentProps) {
   return (
     <div className="flex flex-1 overflow-hidden">
       <div className="w-1/4 border-r border-gray-700 bg-gray-800/50 backdrop-blur-sm">
@@ -23,7 +23,7 @@ export function MainContent({ currentChat, calls, setCurrentChat }: MainContentP
       </div>
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid gap-6 md:grid-cols-2">
-          <CallAnalyticsChart />
+          <CallAnalyticsChart userId={userId} />
           <Insights />
         </div>
         <div className="mt-6">

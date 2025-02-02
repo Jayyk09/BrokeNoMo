@@ -8,11 +8,11 @@ interface ReferencedDocumentsProps {
 export function ReferencedDocuments({ currentChat }: ReferencedDocumentsProps) {
   // This is a placeholder. In a real application, you'd fetch the actual referenced documents.
   const documents = [
-    { id: 1, name: "Product Manual" },
-    { id: 2, name: "Troubleshooting Guide" },
-    { id: 3, name: "Return Policy" },
-    { id: 4, name: "Warranty Information" },
-    { id: 5, name: "Shipping Details" },
+    { id: 1, name: "The Millionare Mission" },
+    { id: 2, name: "The Millionare Next Door" },
+    { id: 3, name: "The Simple Path to Wealth" },
+    { id: 4, name: "The Total Money Makeover" },
+    { id: 5, name: "Tips For Budgeting To Meet Your Financial Goal" },
   ]
 
   return (
@@ -24,7 +24,7 @@ export function ReferencedDocuments({ currentChat }: ReferencedDocumentsProps) {
         {documents.map((doc) => (
           <div key={doc.id} className="flex items-center gap-3 border-b border-gray-700 p-3 hover:bg-gray-700">
             <FileText className="h-5 w-5 text-blue-400" />
-            <span className="text-sm text-white">{doc.name}</span>
+            <span className="text-sm text-white italic">{doc.name}</span>
           </div>
         ))}
       </ScrollArea>
