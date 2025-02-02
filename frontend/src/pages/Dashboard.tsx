@@ -1,83 +1,101 @@
 import React from 'react';
-import { Layout, LogOut, User, Activity, Calendar, Bell } from 'lucide-react';
+import BarChart from '../components/BarChart';
+import BottomInsights from '../components/BottomInsights';
+import RightLedger from '../components/RightLedger';
+import ScrollingInsights from '../components/ScrollingInsights';
+import { BarChart3, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
 
 interface DashboardProps {
   username: string;
-  onLogout: () => void;
 }
 
-function Dashboard({ username, onLogout }: DashboardProps) {
+function Dashboard({ username }: DashboardProps) {
+  const insights = Array(12)
+    .fill(null)
+    .map((_, i) => ({
+      id: i + 1,
+      title: `Insight ${i + 1}`,
+      value: `$${(Math.random() * 10000).toFixed(2)}`,
+      description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`,
+    }));
+
+  const bottomInsights = [
+    { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
+    { icon: DollarSign, title: 'Revenue', value: '$45,678', color: 'text-fuchsia-500' },
+    { icon: Users, title: 'Clients', value: '1,234', color: 'text-fuchsia-500' },
+    { icon: Activity, title: 'Market Activity', value: 'High', color: 'text-fuchsia-500' },
+    { icon: Briefcase, title: 'Investments', value: '$89,012', color: 'text-fuchsia-500' },
+    { icon: PieChart, title: 'Asset Mix', value: 'Balanced', color: 'text-fuchsia-500' },
+  ];
+
+  const ledgerEntries = [
+    {
+      type: 'user' as const,
+      text: 'Request portfolio analysis for Q1 2024',
+      timestamp: '09:45 AM',
+    },
+    {
+      type: 'ai' as const,
+      text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.',
+      timestamp: '09:46 AM',
+    },
+  ];
+
+  const data = [
+    { label: 'A', value: 30 },
+    { label: 'B', value: 80 },
+    { label: 'C', value: 45 },
+    { label: 'D', value: 60 },
+    { label: 'E', value: 20 },
+    { label: 'F', value: 90 },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Layout className="h-8 w-8 text-blue-500" />
-              <h1 className="ml-2 text-xl font-semibold text-gray-800">Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                <User className="h-5 w-5 text-gray-500" />
-                <span className="ml-2 text-gray-700">{username}</span>
-              </div>
-              <button
-                onClick={onLogout}
-                className="flex items-center text-gray-700 hover:text-red-500 transition-colors"
-              >
-                <LogOut className="h-5 w-5" />
-                <span className="ml-2">Logout</span>
-              </button>
-            </div>
+    // 1) Make the container relative to hold our shiny overlay
+    <div className="relative flex h-screen overflow-hidden text-gray-100 bg-black">
+      {/* 2) Shiny overlay (slight top-to-bottom highlight) */}
+      <div
+  className="
+    pointer-events-none
+    absolute 
+    inset-0 
+    bg-gradient-to-b 
+    from-white/5 
+    to-transparent 
+    mix-blend-overlay
+  "
+/>
+
+
+      {/* Left Sidebar */}
+      <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50 bg-gray-900/70">
+        {/* Fixed Username */}
+        <div className="p-4 border-b border-gray-800/50">
+          <div className="flex items-center gap-2">
+            <User className="w-5 h-5 text-purple-400" />
+            <span className="font-semibold">John Doe</span>
           </div>
         </div>
-      </header>
+        {/* Scrolling Insights */}
+        <ScrollingInsights insights={insights} />
+      </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Stats Cards */}
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center">
-              <Activity className="h-10 w-10 text-blue-500" />
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">Active Projects</p>
-                <p className="text-2xl font-semibold text-gray-800">12</p>
-              </div>
-            </div>
+      <div className="flex-1 p-6 flex flex-col">
+        <div className="bg-gray-800/20 rounded-lg p-6 mb-6 backdrop-blur-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <BarChart3 className="w-6 h-6 text-purple-400" />
+            <h2 className="text-xl font-semibold">Performance Overview</h2>
           </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center">
-              <Calendar className="h-10 w-10 text-green-500" />
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">Upcoming Tasks</p>
-                <p className="text-2xl font-semibold text-gray-800">8</p>
-              </div>
-            </div>
+          <div className="h-[300px] bg-gray-800/30 rounded-lg mb-6 flex items-center justify-center">
+            <BarChart data={data} />
           </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center">
-              <Bell className="h-10 w-10 text-purple-500" />
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">Notifications</p>
-                <p className="text-2xl font-semibold text-gray-800">5</p>
-              </div>
-            </div>
-          </div>
+          <BottomInsights insights={bottomInsights} />
         </div>
+      </div>
 
-        {/* Welcome Message */}
-        <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Welcome back, {username}!</h2>
-          <p className="text-gray-600">
-            This is your dashboard where you can monitor your activities and manage your tasks.
-            Feel free to explore the various features available to you.
-          </p>
-        </div>
-      </main>
+      {/* Right Ledger Section */}
+      <RightLedger ledgerEntries={ledgerEntries} />
     </div>
   );
 }
