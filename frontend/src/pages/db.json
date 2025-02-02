@@ -217,6 +217,105 @@
                     }
                 ]
             }
+        },
+        {
+            "user_id": "3142814947",
+            "transactions": {
+                "January 2025": [
+                    {
+                        "id": "txn_463",
+                        "day": 7,
+                        "tags": ["investments", "casual"],
+                        "amount": -260,
+                        "category": "Investments",
+                        "merchant": "Fidelity",
+                        "description": "Savings account contribution",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_416",
+                        "day": 21,
+                        "tags": ["transportation", "essential"],
+                        "amount": -432,
+                        "category": "Transportation",
+                        "merchant": "Uber",
+                        "description": "Public transport pass",
+                        "payment_method": "Venmo"
+                    },
+                    {
+                        "id": "txn_138",
+                        "day": 28,
+                        "tags": ["entertainment", "investment"],
+                        "amount": -359,
+                        "category": "Entertainment",
+                        "merchant": "ESPN+",
+                        "description": "Sports subscription",
+                        "payment_method": "Sports Card"
+                    },
+                    {
+                        "id": "txn_994",
+                        "day": 1,
+                        "tags": ["transportation", "subscription"],
+                        "amount": -166,
+                        "category": "Transportation",
+                        "merchant": "The Bike Hut",
+                        "description": "Bike rental",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_579",
+                        "day": 27,
+                        "tags": ["health & fitness", "luxury"],
+                        "amount": -31,
+                        "category": "Health & Fitness",
+                        "merchant": "Planet Fitness",
+                        "description": "New running shoes",
+                        "payment_method": "Debit Card"
+                    }
+                ],
+                "February 2025": [
+                    {
+                        "id": "txn_449",
+                        "day": 3,
+                        "tags": ["health & fitness", "luxury"],
+                        "amount": -117,
+                        "category": "Health & Fitness",
+                        "merchant": "Planet Fitness",
+                        "description": "Gym membership renewal",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_731",
+                        "day": 9,
+                        "tags": ["health & fitness", "essential"],
+                        "amount": -303,
+                        "category": "Health & Fitness",
+                        "merchant": "Adidas",
+                        "description": "Sports event tickets",
+                        "payment_method": "PayPal"
+                    },
+                    {
+                        "id": "txn_288",
+                        "day": 19,
+                        "tags": ["shopping", "luxury"],
+                        "amount": -206,
+                        "category": "Shopping",
+                        "merchant": "Best Buy",
+                        "description": "New clothing",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_363",
+                        "day": 26,
+                        "tags": ["transportation", "essential"],
+                        "amount": -30,
+                        "category": "Transportation",
+                        "merchant": "Tesla Supercharger",
+                        "description": "Public transport pass",
+                        "payment_method": "Credit Card"
+                    }
+                ]
+            }
         }
     ]
 }
