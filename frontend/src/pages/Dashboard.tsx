@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { listCalls } from '../lib/utils.tsx';
 import BarChart from '../components/BarChart';
 import BottomInsights from '../components/BottomInsights';
 import RightLedger from '../components/RightLedger';
@@ -11,14 +13,16 @@ interface DashboardProps {
 }
 
 function Dashboard({ username }: DashboardProps) {
-  const insights = Array(12)
-    .fill(null)
-    .map((_, i) => ({
-      id: i + 1,
-      title: `Insight ${i + 1}`,
-      value: `$${(Math.random() * 10000).toFixed(2)}`,
-      description: `Detailed analysis for Insight ${i + 1}. This shows the performance metrics and key indicators for this specific financial aspect. Click to learn more about the trends and patterns.`,
-    }));
+  const [insights, setInsights] = useState([]);
+
+  useEffect(() => {
+    async function fetchInsights() {
+      const data = await listCalls(username);
+      setInsights(data);
+    }
+
+    fetchInsights();
+  }, []);
 
   const bottomInsights = [
     { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
