@@ -6,6 +6,7 @@ import BottomInsights from '../components/BottomInsights';
 import RightLedger from '../components/RightLedger';
 import ScrollingInsights from '../components/ScrollingInsights';
 import { BarChart3, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
+import { Spotlight } from '../components/ui/spotlight-new';
 
 interface DashboardProps {
   username: string;    // or userId: string
@@ -59,17 +60,7 @@ function Dashboard({ username }: DashboardProps) {
     // 1) Make the container relative to hold our shiny overlay
     <div className="relative flex h-screen overflow-hidden text-gray-100 bg-black">
       {/* 2) Shiny overlay (slight top-to-bottom highlight) */}
-      <div
-  className="
-    pointer-events-none
-    absolute 
-    inset-0 
-    bg-gradient-to-b 
-    from-white/5 
-    to-transparent 
-    mix-blend-overlay
-  "
-/>
+      <Spotlight/>
 
 
       {/* Left Sidebar */}
@@ -86,7 +77,7 @@ function Dashboard({ username }: DashboardProps) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 flex flex-col">
+      <div className="flex-1 p-6 flex flex-col bg-transparent">
         <div className="bg-gray-800/20 rounded-lg p-6 mb-6 backdrop-blur-sm">
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="w-6 h-6 text-purple-400" />

@@ -1,84 +1,48 @@
 import json
 import os
-from typing import Optional
+from datetime import datetime
 from dotenv import load_dotenv
-from RAG_Model.helper_utils import load_or_create_faiss_index
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.websockets import WebSocketState
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from concurrent.futures import TimeoutError as ConnectionTimeoutError
 from retell import Retell
-from custom_types import (
-    ConfigResponse,
-    ResponseRequiredRequest,
-)
+from custom_types import ConfigResponse, ResponseRequiredRequest
 from llm import LLMClient
-from datetime import datetime
 
-def format_conversation(post_data):
-    # Extract necessary data
-    conversation_data = post_data.get("data", {}).get("transcript_object", [])
-    call_id = post_data.get("data", {}).get("call_id", "unknown")
-    timestamp = datetime.utcnow().isoformat()
-
-    # Only keep 'role' and 'content' in the conversation
-    formatted_conversation = []
-    for entry in conversation_data:
-        formatted_conversation.append({
-            "role": entry["role"],
-            "content": entry["content"]
-        })
-
-    # Structure the formatted data
-    return {
-        "conversation": formatted_conversation,
-        "call_id": call_id,
-        "timestamp": timestamp
-    }
-
+# Load environment variables
 load_dotenv(override=True)
 retell = Retell(api_key=os.getenv("RETELL_API_KEY"))
 
-retriever = None  # Global retriever instance
+app = FastAPI()
 
-# use lifespan to initialize retriever
-async def app_lifespan(app):
-    global retriever
-    pdf_paths = ["RAG_Model/data/Brian_Preston_Millionaire_Mission.pdf"]
-    retriever_path = "RAG_Model/retriever.json"
-
-    # Startup logic
-    print("Initializing retriever during lifespan startup...")
-    if not os.path.exists(retriever_path):
-        print("Retriever file not found. Initializing a new FAISS index...")
-        retriever = load_or_create_faiss_index(pdf_paths, retriever_path)
-        retriever.save_local(retriever_path)
-        print("Retriever initialized and saved locally.")
-    else:
-        print("Retriever file found. Loading existing FAISS index...")
-        retriever = load_or_create_faiss_index([], retriever_path)
-        print("Retriever loaded successfully.")
-
-    yield  # Lifespan enters the main application runtime here
-
-app = FastAPI(lifespan=app_lifespan)
-origins = [
-    "http://localhost:5174",  #React frontend
-
-]
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:5174"],  # React frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Handle webhook from Retell server. This is used to receive events from Retell server.
-# Including call_started, call_ended, call_analyzed
+def format_conversation(post_data):
+    """Formats conversation data received from Retell."""
+    conversation_data = post_data.get("data", {}).get("transcript_object", [])
+    call_id = post_data.get("data", {}).get("call_id", "unknown")
+    timestamp = datetime.utcnow().isoformat()
+    
+    formatted_conversation = [{"role": entry["role"], "content": entry["content"]} for entry in conversation_data]
+    
+    return {
+        "conversation": formatted_conversation,
+        "call_id": call_id,
+        "timestamp": timestamp,
+    }
+
 @app.post("/webhook")
 async def handle_webhook(request: Request):
+    """Handles incoming webhook events from Retell."""
     try:
         post_data = await request.json()
         valid_signature = retell.verify(
@@ -87,120 +51,76 @@ async def handle_webhook(request: Request):
             signature=str(request.headers.get("X-Retell-Signature")),
         )
         if not valid_signature:
-            print("Received Unauthorized", post_data["event"], post_data["data"]["call_id"])
+            print("Unauthorized event received", post_data.get("event"))
             return JSONResponse(status_code=401, content={"message": "Unauthorized"})
         
-        # Check the event type
-        if post_data["event"] == "call_started":
-            print("Call started event", post_data["data"]["call_id"])  # This should print
-            print("from number", post_data["data"]["from_number"])  # This should print
-
-        elif post_data["event"] == "call_ended":
-            print("Call ended event", post_data["data"]["call_id"])
-            # Clear the active call for that number
-            from_number = post_data["data"]["from_number"]  # Get the from_number
-            print(from_number)
-        elif post_data["event"] == "call_analyzed":
-            formatted_conversation = format_conversation(post_data=post_data)
-            print(formatted_conversation)
+        event_type = post_data.get("event")
+        call_id = post_data.get("data", {}).get("call_id", "unknown")
+        
+        if event_type == "call_started":
+            print(f"Call started: {call_id}, from: {post_data['data'].get('from_number')}")
+        elif event_type == "call_ended":
+            print(f"Call ended: {call_id}, from: {post_data['data'].get('from_number')}")
+        elif event_type == "call_analyzed":
+            print("Analyzed call data:", format_conversation(post_data))
         else:
-            print("Unknown event", post_data["event"])
+            print("Unknown event received:", event_type)
         
         return JSONResponse(status_code=200, content={"received": True})
     except Exception as err:
-        print(f"Error in webhook: {err}")
+        print(f"Error handling webhook: {err}")
         return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
-    
-# Start a websocket server to exchange text input and output with Retell server. Retell server
-# will send over transcriptions and other information. This server here will be responsible for
-# generating responses with LLM and send back to Retell server.
+
 @app.websocket("/llm-websocket/{call_id}")
 async def websocket_handler(websocket: WebSocket, call_id: str):
+    """Handles real-time communication with Retell's server over WebSocket."""
     try:
         await websocket.accept()
-        llm_client = LLMClient(retriever) if retriever else None
-
-        if llm_client is None:
-            raise Exception("Retriever not initialized")
-
-        # Send initial configuration to the client
-        config = ConfigResponse(
+        llm_client = LLMClient()
+        
+        # Send initial configuration
+        await websocket.send_json(ConfigResponse(
             response_type="config",
-            config={
-                "auto_reconnect": True,
-                "call_details": True,
-            },
-            response_id=1,
-        )
-        await websocket.send_json(config.__dict__)
-
-        # Handle incoming messages
+            config={"auto_reconnect": True, "call_details": True},
+            response_id=1
+        ).__dict__)
+        
         async def handle_message(request_json):
             try:
-                # Ensure WebSocket is open
                 if websocket.client_state != WebSocketState.CONNECTED:
-                    print("WebSocket is no longer connected.")
+                    print("WebSocket disconnected.")
                     return
-
-                await websocket.send_json(request_json)  # Send incoming message back
-                interaction_type = request_json["interaction_type"]
+                
+                interaction_type = request_json.get("interaction_type")
                 response_id = request_json.get("response_id", 0)
-                transcript = request_json.get("transcript", [])
-                timestamp = request_json.get("timestamp", "")
-
-                print(f"Interaction Type: {interaction_type}")  # Debugging line
-
-                # Handle specific interaction types
+                
+                print(f"Handling interaction type: {interaction_type}")
+                
                 if interaction_type == "call_details":
-                    first_event = llm_client.draft_begin_message()
-                    await websocket.send_json(first_event.__dict__)
-
-                    return
-
-                if request_json["interaction_type"] == "ping_pong":
-                    await websocket.send_json(
-                        {
-                        "response_type": "ping_pong",
-                        "timestamp": request_json["timestamp"],
-                        }
-                )
-                    return
-                if request_json["interaction_type"] == "update_only":
-                    return
-
-                if (
-                    request_json["interaction_type"] == "response_required"
-                    or request_json["interaction_type"] == "reminder_required"
-                ):
-                    response_id = request_json["response_id"]
+                    await websocket.send_json(llm_client.draft_begin_message().__dict__)
+                elif interaction_type == "ping_pong":
+                    await websocket.send_json({"response_type": "ping_pong", "timestamp": request_json.get("timestamp")})
+                elif interaction_type in ("response_required", "reminder_required"):
                     request = ResponseRequiredRequest(
-                        interaction_type=request_json["interaction_type"],
+                        interaction_type=interaction_type,
                         response_id=response_id,
-                        transcript=request_json["transcript"],
+                        transcript=request_json.get("transcript", []),
                     )
-                    print(
-                        f"""Received interaction_type={request_json['interaction_type']}, response_id={response_id}, last_transcript={request_json['transcript'][-1]['content']}"""
-                    )
-
                     async for event in llm_client.draft_response(request):
                         await websocket.send_json(event.__dict__)
                         if request.response_id < response_id:
-                            break  # new response needed, abandon this one
-
+                            break
             except Exception as e:
-                print(f"Error in handle_message: {e}")  # Debugging line
-
-        # Listen for WebSocket messages and handle them
+                print(f"Error handling message: {e}")
+        
         async for data in websocket.iter_json():
-            # print("Received data:", data)  # Debugging line
             await handle_message(data)
-
     except WebSocketDisconnect:
-        print(f"LLM WebSocket disconnected for {call_id}")
-    except ConnectionTimeoutError as e:
-        print(f"Connection timeout error for {call_id}")
+        print(f"WebSocket disconnected for call {call_id}")
+    except ConnectionTimeoutError:
+        print(f"Connection timeout for call {call_id}")
     except Exception as e:
-        print(f"Error in LLM WebSocket: {e} for {call_id}")
+        print(f"WebSocket error for call {call_id}: {e}")
         await websocket.close(1011, "Server error")
     finally:
-        print(f"LLM WebSocket connection closed for {call_id}")
+        print(f"WebSocket connection closed for call {call_id}")
