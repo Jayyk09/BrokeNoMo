@@ -1,119 +1,42 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import BarChart from '../components/BarChart';
-import BottomInsights from '../components/BottomInsights';
-import RightLedger from '../components/RightLedger';
-import ScrollingInsights from '../components/ScrollingInsights';
-import { BarChart3, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
-import { Spotlight } from '../components/ui/spotlight-new';
-import Retell from 'retell-sdk';
-import dotenv from 'dotenv';
-dotenv.config();
+import { motion } from "framer-motion";
 
-const client = new Retell({
-  apiKey: process.env.RETELL_API_KEY || '',
-});
-interface DashboardProps {
-  username: string;    // or userId: string
-  onLogout: () => void;
-}
-
-function Dashboard({ username }: DashboardProps) {
-  const [callData, setData] = useState(null);
-
-  useEffect(() => {
-      async function fetchData() {
-        try{
-          const response = await fetch('http://localhost:8080/calls');
-          console.log(response);
-          const data = await response.json();
-          console.log(data);
-          setData(data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-    }
-    fetchData();
-  }), [];
-
-  const bottomInsights = [
-    { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
-    { icon: DollarSign, title: 'Revenue', value: '$45,678', color: 'text-fuchsia-500' },
-    { icon: Users, title: 'Clients', value: '1,234', color: 'text-fuchsia-500' },
-    { icon: Activity, title: 'Market Activity', value: 'High', color: 'text-fuchsia-500' },
-    { icon: Briefcase, title: 'Investments', value: '$89,012', color: 'text-fuchsia-500' },
-    { icon: PieChart, title: 'Asset Mix', value: 'Balanced', color: 'text-fuchsia-500' },
-  ];
-
-  const ledgerEntries = [
-    {
-      type: 'user' as const,
-      text: 'Request portfolio analysis for Q1 2024',
-      timestamp: '09:45 AM',
-    },
-    {
-      type: 'ai' as const,
-      text: 'Analysis complete. Portfolio shows -15% growth with notable performance in tech sector. Recommend rebalancing energy holdings.',
-      timestamp: '09:46 AM',
-    },
-  ];
-
-  const data = [
-    { label: 'A', value: 30 },
-    { label: 'B', value: 80 },
-    { label: 'C', value: 45 },
-    { label: 'D', value: 60 },
-    { label: 'E', value: 20 },
-    { label: 'F', value: 90 },
-  ];
-
+export default function Dashboard() {
   return (
-    // 1) Make the container relative to hold our shiny overlay
-    <div className="relative flex h-screen overflow-hidden text-gray-100 bg-black">
-      {/* 2) Shiny overlay (slight top-to-bottom highlight) */}
-      <div
-        className="
-          pointer-events-none
-          absolute 
-          inset-0 
-          bg-gradient-to-b 
-          from-white/5 
-          to-transparent 
-          mix-blend-overlay
-        "
-      />
-
-      {/* Left Sidebar */}
-      <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50 bg-gray-900/70">
-        {/* Fixed Username */}
-        <div className="p-4 border-b border-gray-800/50">
-          <div className="flex items-center gap-2">
-            <User className="w-5 h-5 text-purple-400" />
-            <span className="font-semibold">John Doe</span>
-          </div>
+    <div className="h-screen w-full flex flex-row bg-black/[0.96] antialiased relative overflow-hidden">
+      <aside className="w-1/4 bg-neutral-900/50 p-4 border-r border-gray-800 backdrop-blur-md">
+        <h2 className="text-lg text-white font-semibold mb-4">Previous Messages</h2>
+        <ul className="space-y-2 text-neutral-400">
+          <li>+1-408-585-8267</li>
+          <li>+1-917-828-6465</li>
+          <li>+1-972-555-0789</li>
+          <li>+1-817-555-0321</li>
+          <li>+1-214-555-0654</li>
+        </ul>
+      </aside>
+      
+      <main className="flex-1 flex flex-col p-6">
+        <section className="bg-neutral-900/50 rounded-2xl p-6 shadow-lg mb-4 backdrop-blur-md">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">
+            Spotlight <br /> That Stands Out
+          </h1>
+        </section>
+        
+        <section className="bg-neutral-900/50 rounded-2xl p-6 shadow-lg flex-1 backdrop-blur-md">
+          <p className="text-lg text-neutral-300">
+            A subtle yet effective spotlight effect, avoiding overuse while maintaining elegance.
+          </p>
+        </section>
+      </main>
+      
+      <aside className="w-1/4 bg-neutral-900/50 p-4 border-l border-gray-800 backdrop-blur-md">
+        <h2 className="text-lg text-white font-semibold mb-4">Chat Transcript</h2>
+        <div className="text-neutral-300 text-sm space-y-2">
+          <p><strong>Agent:</strong> Hey! I can help with checking your account balance, transferring funds, and loan applications.</p>
+          <p><strong>User:</strong> Cool. Could</p>
+          <p><strong>Agent:</strong> So, what do you need?</p>
+          <p><strong>User:</strong> I do my account balance, please?</p>
         </div>
-        {/* Scrolling Insights */}
-        {/* <ScrollingInsights insights={insights} /> */}
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 p-6 flex flex-col bg-transparent">
-        <div className="bg-gray-800/20 rounded-lg p-6 mb-6 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="w-6 h-6 text-purple-400" />
-            <h2 className="text-xl font-semibold">Performance Overview</h2>
-          </div>
-          <div className="h-[300px] bg-gray-800/30 rounded-lg mb-6 flex items-center justify-center">
-            <BarChart data={data} />
-          </div>
-          <BottomInsights insights={bottomInsights} />
-        </div>
-      </div>
-
-      {/* Right Ledger Section */}
-      <RightLedger ledgerEntries={ledgerEntries} />
+      </aside>
     </div>
   );
 }
-
-export default Dashboard;
