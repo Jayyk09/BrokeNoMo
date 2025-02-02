@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
-
+import { useUserContext } from "../context/UserContext"
 
 
 const data = [
@@ -35,10 +35,8 @@ const data = [
 ]
 
 export function CallAnalyticsChart() {
-    const [userId, setUserId] = useState("")
+    const { userId, setUserId } = useUserContext();
     const [validUserIds, setValidUserIds] = useState<string[]>([])
-
-    const placeholders = ["Enter your phone number", "Please input your phone number", "Type in your phone number"]
 
     useEffect(() => {
     fetch("https://api.jsonbin.io/v3/b/679ec0fdad19ca34f8f8491d")
