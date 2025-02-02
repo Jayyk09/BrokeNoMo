@@ -1,28 +1,24 @@
-import React, { useState } from 'react';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import React, { useState } from "react";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState("");
 
-  const handleLogin = (enteredUsername: string) => {
-    setUsername(enteredUsername);
+  const handleLogin = (enteredUserId: string) => {
+    setUserId(enteredUserId);
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setUsername('');
+    setUserId("");
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {!isLoggedIn ? (
-        <Login onLogin={handleLogin} />
-      ) : (
-        <Dashboard username={username} onLogout={handleLogout} />
-      )}
+      {!isLoggedIn ? <Login onLogin={handleLogin} /> : <Dashboard userId={userId} onLogout={handleLogout} />}
     </div>
   );
 }
