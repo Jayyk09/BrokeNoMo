@@ -11,15 +11,10 @@ function App() {
     setIsLoggedIn(true);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserId("");
-  };
-
   return (
     <div className="min-h-screen bg-gray-100">
-      {!isLoggedIn ? <Login onLogin={handleLogin} /> : // App.tsx
-        <Dashboard username={userId} onLogout={handleLogout} /> }
+      {!isLoggedIn ? <Login onLogin={handleLogin} /> : 
+        <Dashboard userId={userId as string} /> }
     </div>
   );
 }
