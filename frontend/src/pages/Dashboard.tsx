@@ -1,28 +1,24 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { listCalls } from '../lib/utils.tsx';
 import BarChart from '../components/BarChart';
 import BottomInsights from '../components/BottomInsights';
 import RightLedger from '../components/RightLedger';
 import ScrollingInsights from '../components/ScrollingInsights';
 import { BarChart3, User, TrendingUp, DollarSign, Users, Activity, Briefcase, PieChart } from 'lucide-react';
+import Retell from 'retell-sdk';
+import dotenv from 'dotenv';
+dotenv.config();
 
+const client = new Retell({
+  apiKey: process.env.RETELL_API_KEY || '',
+});
 interface DashboardProps {
   username: string;    // or userId: string
   onLogout: () => void;
 }
 
 function Dashboard({ username }: DashboardProps) {
-  const [insights, setInsights] = useState([]);
-
-  useEffect(() => {
-    async function fetchInsights() {
-      const data = await listCalls(username);
-      setInsights(data);
-    }
-
-    fetchInsights();
-  }, []);
+  
 
   const bottomInsights = [
     { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
@@ -60,17 +56,16 @@ function Dashboard({ username }: DashboardProps) {
     <div className="relative flex h-screen overflow-hidden text-gray-100 bg-black">
       {/* 2) Shiny overlay (slight top-to-bottom highlight) */}
       <div
-  className="
-    pointer-events-none
-    absolute 
-    inset-0 
-    bg-gradient-to-b 
-    from-white/5 
-    to-transparent 
-    mix-blend-overlay
-  "
-/>
-
+        className="
+          pointer-events-none
+          absolute 
+          inset-0 
+          bg-gradient-to-b 
+          from-white/5 
+          to-transparent 
+          mix-blend-overlay
+        "
+      />
 
       {/* Left Sidebar */}
       <div className="w-[10%] min-w-[200px] flex flex-col h-full border-r border-gray-800/50 bg-gray-900/70">
@@ -82,7 +77,7 @@ function Dashboard({ username }: DashboardProps) {
           </div>
         </div>
         {/* Scrolling Insights */}
-        <ScrollingInsights insights={insights} />
+        {/* <ScrollingInsights insights={insights} /> */}
       </div>
 
       {/* Main Content */}
