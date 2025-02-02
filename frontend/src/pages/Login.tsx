@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Boxes } from "../components/ui/background-boxes";
 import { Input } from "../components/ui/input";
+// Removed the import for TextGenerateEffect due to the error
+import { TextGenerateEffect } from "../components/ui/text-generate-effect";
 
 interface LoginProps {
   onLogin: (userId: string) => void;
@@ -34,21 +36,20 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       alert("Invalid User ID. Please try again.");
     }
   };
+  
+  const intro_words: string = "Enter your credentials to access the next generation of our platform."
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 overflow-hidden relative">
-      <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+      <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 mask-image-radial-gradient-transparent-white pointer-events-none" />
       
-      <Boxes className="z-10" />
+      <Boxes className="z-20" />
 
       {/* Gradient Text */}
-      <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-400 relative z-20 tracking-wide mb-4">
-        Welcome to Login
+      <h1 className="text-5xl z-20 md:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
+        BrokeNoMo
       </h1>
-
-      <p className="text-gray-300 text-lg text-center max-w-2xl relative z-20">
-        Enter your credentials to access the next generation of our platform.
-      </p>
+      <TextGenerateEffect className="z-20" words={intro_words} />;
 
       <form onSubmit={handleSubmit} className="relative z-20 w-full max-w-md mt-6 flex space-x-4">
         {/* Glassmorphic Input Field */}
@@ -71,7 +72,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </button>
       </form>
 
-      <p className="text-gray-400 text-sm mt-4">
+      <p className="text-gray-400 text-sm mt-4 z-20">
         By continuing, you agree to our{" "}
         <span className="text-purple-400 cursor-pointer hover:underline">Terms of Service</span> and{" "}
         <span className="text-purple-400 cursor-pointer hover:underline">Privacy Policy</span>.
