@@ -18,18 +18,18 @@ const ScrollingInsights: React.FC<ScrollingInsightsProps> = ({ insights }) => {
           <div className="scroll-content">
             {/* First copy of insights */}
             {insights.map((insight) => (
-              <div key={insight.id} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
+                <div key={insight.id} className="p-4
+              transition-colors
+              hover:bg-gray-800/30
+              border-r border-blue-500
+              hover:border-blue-300
+              hover:shadow-lg hover:shadow-blue-500/50
+              ">
                 <h3 className="text-sm font-medium text-center">{insight.title}</h3>
                 <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-              </div>
+                </div>
             ))}
             {/* Duplicate insights for seamless scrolling */}
-            {insights.map((insight) => (
-              <div key={`dup-${insight.id}`} className="p-4 border-b border-gray-800/30 hover:bg-gray-800/30 transition-colors">
-                <h3 className="text-sm font-medium text-center">{insight.title}</h3>
-                <p className="text-center text-purple-400 mt-1">{insight.value}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>

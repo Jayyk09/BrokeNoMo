@@ -22,20 +22,7 @@
 }
 
 /* Hide scrollbar for WebKit-based browsers */
-.animate-scroll::-webkit-scrollbar {
-  display: none;
-}
 
-/* Duplicate content for seamless effect */
-.animate-scroll .scroll-content {
-  display: flex;
-  flex-direction: column;
-  animation: scroll 30s linear infinite;
-}
-
-.animate-scroll:hover .scroll-content {
-  animation-play-state: paused;
-}
 .tooltip {
   @apply invisible absolute;
 }

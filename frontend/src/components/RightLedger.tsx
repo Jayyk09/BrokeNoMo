@@ -16,7 +16,7 @@ interface LedgerEntry {
       <div className="w-1/4 min-w-[300px] border-l border-gray-800/50 p-6 bg-gray-900/70">
         <div className="flex items-center gap-2 mb-6">
           <MessageSquare className="w-6 h-6 text-purple-400" />
-          <h2 className="text-xl font-semibold">Transaction Ledger</h2>
+          <h2 className="text-xl font-semibold">Call #</h2>
         </div>
         <div className="space-y-0">
           {ledgerEntries.map((entry, index) => (
