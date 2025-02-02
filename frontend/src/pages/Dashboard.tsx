@@ -19,7 +19,22 @@ interface DashboardProps {
 }
 
 function Dashboard({ username }: DashboardProps) {
-  
+  const [callData, setData] = useState(null);
+
+  useEffect(() => {
+      async function fetchData() {
+        try{
+          const response = await fetch('http://localhost:8080/calls');
+          console.log(response);
+          const data = await response.json();
+          console.log(data);
+          setData(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+    }
+    fetchData();
+  }), [];
 
   const bottomInsights = [
     { icon: TrendingUp, title: 'Growth Rate', value: '+15.8%', color: 'text-fuchsia-500' },
