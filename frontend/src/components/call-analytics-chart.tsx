@@ -1,7 +1,10 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+
+
 
 const data = [
   {
@@ -28,13 +31,25 @@ const data = [
     name: "Sat",
     total: 2390,
   },
-  {
-    name: "Sun",
-    total: 3490,
-  },
+
 ]
 
 export function CallAnalyticsChart() {
+    const [userId, setUserId] = useState("")
+    const [validUserIds, setValidUserIds] = useState<string[]>([])
+
+    const placeholders = ["Enter your phone number", "Please input your phone number", "Type in your phone number"]
+
+    useEffect(() => {
+    fetch("https://api.jsonbin.io/v3/b/679ec0fdad19ca34f8f8491d")
+      .then((res) => res.json())
+      .then((data) => {
+        const users = data.record.users || []
+        setValidUserIds(users.map((user: { user_id: string }) => user.user_id))
+      })
+      .catch((err) => console.error("Error loading users:", err))
+  }, [])
+    
   return (
     <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 shadow-lg">
       <CardHeader>
