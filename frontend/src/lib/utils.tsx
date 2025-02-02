@@ -9,11 +9,16 @@ function cn(...inputs: ClassValue[]) {
 
 
 const client = new Retell({
-  apiKey: process.env.RETELL_API_KEY,
+  apiKey: process.env.RETELL_API_KEY || '',
 });
 
-async function listCalls() {
-  const callResponses = await client.call.list();
+export async function listCalls(number: string) {
+  const callResponses = await client.call.list({
+    filter_criteria:{
+      from_number: [number],
+    },
+    limit: 9,
+  });
 
   console.log(callResponses);
 }
