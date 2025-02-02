@@ -36,10 +36,10 @@ const data = [
 
 export function CallAnalyticsChart() {
   return (
-    <Card className="bg-gray-800/50 backdrop-blur-sm">
+    <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 shadow-lg">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-white">Call Analytics</CardTitle>
-        <CardDescription className="text-gray-300">Your call volume over the past week</CardDescription>
+        <CardTitle className="text-2xl font-bold text-white">📊 Call Analytics Magic</CardTitle>
+        <CardDescription className="text-gray-300">Watch your call volume dance through the week ✨</CardDescription>
       </CardHeader>
       <CardContent className="pl-2">
         <ResponsiveContainer width="100%" height={350}>
@@ -64,7 +64,7 @@ export function CallAnalyticsChart() {
               dataKey="total" 
               fill="#6366f1" 
               radius={[6, 6, 0, 0]}
-              className="hover:opacity-80 transition-opacity"
+              className="hover:opacity-80 hover:fill-indigo-400 transition-all duration-300 cursor-pointer"
             />
           </BarChart>
         </ResponsiveContainer>

@@ -10,9 +10,9 @@ interface ChatTranscriptProps {
 export function ChatTranscript({ currentChat }: ChatTranscriptProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-      <Card className="bg-gray-800/50 backdrop-blur-sm">
+      <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 shadow-lg">
         <CardHeader>
-          <CardTitle className="text-gray-100">Chat Transcript</CardTitle>
+          <CardTitle className="text-gray-100">💬 Chat Magic Unfolds</CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[400px] pr-4">
@@ -31,11 +31,15 @@ export function ChatTranscript({ currentChat }: ChatTranscriptProps) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`rounded-lg p-3 ${
-                      transcript.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"
+                    className={`rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-300 ${
+                      transcript.role === "user" 
+                        ? "bg-blue-600/90 text-white hover:bg-blue-600" 
+                        : "bg-gray-700/90 text-gray-200 hover:bg-gray-700"
                     }`}
                   >
-                    <p className="mb-1 font-semibold capitalize text-gray-300">{transcript.role}:</p>
+                    <p className="mb-1 font-semibold capitalize text-gray-300">
+                      {transcript.role === "user" ? "🧑 You" : "🤖 Assistant"}:
+                    </p>
                     <p>{transcript.content}</p>
                   </motion.div>
                 ))}
