@@ -1,0 +1,222 @@
+{
+    "users": [
+        {
+            "user_id": "4703300803",
+            "transactions": {
+                "January 2025": [
+                    {
+                        "id": "txn_463",
+                        "day": 7,
+                        "tags": ["investments", "casual"],
+                        "amount": -260,
+                        "category": "Investments",
+                        "merchant": "Charles Schwab",
+                        "description": "Savings account contribution",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_416",
+                        "day": 21,
+                        "tags": ["transportation", "essential"],
+                        "amount": -432,
+                        "category": "Transportation",
+                        "merchant": "Lyft",
+                        "description": "Public transport pass",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_138",
+                        "day": 28,
+                        "tags": ["entertainment", "investment"],
+                        "amount": -359,
+                        "category": "Entertainment",
+                        "merchant": "Hulu",
+                        "description": "Streaming subscription",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_994",
+                        "day": 1,
+                        "tags": ["transportation", "subscription"],
+                        "amount": -166,
+                        "category": "Transportation",
+                        "merchant": "Uber",
+                        "description": "Bike rental",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_579",
+                        "day": 27,
+                        "tags": ["health & fitness", "luxury"],
+                        "amount": -31,
+                        "category": "Health & Fitness",
+                        "merchant": "Planet Fitness",
+                        "description": "New running shoes",
+                        "payment_method": "Debit Card"
+                    }
+                ],
+                "February 2025": [
+                    {
+                        "id": "txn_449",
+                        "day": 3,
+                        "tags": ["health & fitness", "luxury"],
+                        "amount": -117,
+                        "category": "Health & Fitness",
+                        "merchant": "Planet Fitness",
+                        "description": "Gym membership renewal",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_461",
+                        "day": 11,
+                        "tags": ["investments", "casual"],
+                        "amount": -73,
+                        "category": "Investments",
+                        "merchant": "Coinbase",
+                        "description": "ETF investment",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_439",
+                        "day": 12,
+                        "tags": ["shopping", "investment"],
+                        "amount": -77,
+                        "category": "Shopping",
+                        "merchant": "Walmart",
+                        "description": "New clothing",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_353",
+                        "day": 6,
+                        "tags": ["transportation", "essential"],
+                        "amount": -280,
+                        "category": "Transportation",
+                        "merchant": "Uber",
+                        "description": "Bike rental",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_688",
+                        "day": 19,
+                        "tags": ["food & dining", "casual"],
+                        "amount": -326,
+                        "category": "Food & Dining",
+                        "merchant": "Olive Garden",
+                        "description": "Lunch at restaurant",
+                        "payment_method": "Bank Transfer"
+                    }
+                ]
+            }
+        },
+        {
+            "user_id": "2052391306",
+            "transactions": {
+                "January 2025": [
+                    {
+                        "id": "txn_742",
+                        "day": 2,
+                        "tags": ["health & fitness", "luxury"],
+                        "amount": -485,
+                        "category": "Health & Fitness",
+                        "merchant": "Nike",
+                        "description": "Buying workout supplements",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_492",
+                        "day": 8,
+                        "tags": ["investments", "luxury"],
+                        "amount": -214,
+                        "category": "Investments",
+                        "merchant": "Coinbase",
+                        "description": "Crypto transaction",
+                        "payment_method": "Bank Transfer"
+                    },
+                    {
+                        "id": "txn_481",
+                        "day": 12,
+                        "tags": ["health & fitness", "investment"],
+                        "amount": -13,
+                        "category": "Health & Fitness",
+                        "merchant": "Nike",
+                        "description": "Personal training session",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_251",
+                        "day": 28,
+                        "tags": ["health & fitness", "casual"],
+                        "amount": -446,
+                        "category": "Health & Fitness",
+                        "merchant": "GNC",
+                        "description": "Personal training session",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_222",
+                        "day": 16,
+                        "tags": ["investments", "investment"],
+                        "amount": -285,
+                        "category": "Investments",
+                        "merchant": "Fidelity",
+                        "description": "Crypto transaction",
+                        "payment_method": "Credit Card"
+                    }
+                ],
+                "February 2025": [
+                    {
+                        "id": "txn_262",
+                        "day": 24,
+                        "tags": ["shopping", "essential"],
+                        "amount": -442,
+                        "category": "Shopping",
+                        "merchant": "Target",
+                        "description": "Tech gadget purchase",
+                        "payment_method": "Debit Card"
+                    },
+                    {
+                        "id": "txn_731",
+                        "day": 9,
+                        "tags": ["health & fitness", "essential"],
+                        "amount": -303,
+                        "category": "Health & Fitness",
+                        "merchant": "Adidas",
+                        "description": "Sports event tickets",
+                        "payment_method": "PayPal"
+                    },
+                    {
+                        "id": "txn_288",
+                        "day": 19,
+                        "tags": ["shopping", "luxury"],
+                        "amount": -206,
+                        "category": "Shopping",
+                        "merchant": "Best Buy",
+                        "description": "New clothing",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_363",
+                        "day": 26,
+                        "tags": ["transportation", "essential"],
+                        "amount": -30,
+                        "category": "Transportation",
+                        "merchant": "Tesla Supercharger",
+                        "description": "Public transport pass",
+                        "payment_method": "Credit Card"
+                    },
+                    {
+                        "id": "txn_661",
+                        "day": 28,
+                        "tags": ["food & dining", "essential"],
+                        "amount": -329,
+                        "category": "Food & Dining",
+                        "merchant": "Olive Garden",
+                        "description": "Morning coffee",
+                        "payment_method": "PayPal"
+                    }
+                ]
+            }
+        }
+    ]
+}

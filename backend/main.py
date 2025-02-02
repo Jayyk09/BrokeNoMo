@@ -14,9 +14,7 @@ from custom_types import (
     ResponseRequiredRequest,
 )
 from llm import LLMClient
-from db.db import save_message
 from datetime import datetime
-
 
 def format_conversation(post_data):
     # Extract necessary data
@@ -194,7 +192,7 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
 
         # Listen for WebSocket messages and handle them
         async for data in websocket.iter_json():
-            print("Received data:", data)  # Debugging line
+            # print("Received data:", data)  # Debugging line
             await handle_message(data)
 
     except WebSocketDisconnect:
