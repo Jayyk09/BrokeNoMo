@@ -7,6 +7,7 @@ from fastapi.websockets import WebSocketState
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from concurrent.futures import TimeoutError as ConnectionTimeoutError
+import httpx
 from retell import Retell
 from custom_types import ConfigResponse, ResponseRequiredRequest
 from llm import LLMClient
@@ -20,7 +21,7 @@ app = FastAPI()
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5174"],  # React frontend
+    allow_origins=["http://localhost:5173"],  # React frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -124,3 +125,39 @@ async def websocket_handler(websocket: WebSocket, call_id: str):
         await websocket.close(1011, "Server error")
     finally:
         print(f"WebSocket connection closed for call {call_id}")
+
+@app.get("/calls/{number}")
+async def get_calls(number: str):
+    try:
+        # Add +1 to the front of the number for making the call
+        number = "+1" + number
+        
+        # Define the Retell API URL and headers
+        url = "https://api.retellai.com/v2/list-calls/"
+        headers = {
+            'Authorization': 'Bearer key_83c76c2b934e13732813046f72d7',
+            'Content-Type': 'application/json'
+        }
+        data = {
+            "filter_criteria": {
+                "from_number": [number]  # Pass as an array of strings
+            }
+        }
+        
+        # Make an asynchronous POST request to the Retell API
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json=data, headers=headers)
+        
+        # Check if the response was successful
+        if response.status_code == 200:
+            call_responses = response.json()
+            if not call_responses:
+                return JSONResponse(status_code=404, content={"message": "No calls found"})
+            return call_responses
+        else:
+            return JSONResponse(status_code=response.status_code, content={"message": "Error fetching calls"})
+    
+    except Exception as e:
+        print(f"Error fetching calls for {number}: {e}")
+        return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
+
